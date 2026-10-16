@@ -1,0 +1,7 @@
+# 在（master 节点执行）
+
+# 保存文件 deploy-nginx.yaml，然后应用
+kubectl apply -f deploy-nginx.yaml -n test
+
+# 查看资源
+kubectl get deploy,pod,svc -n test
