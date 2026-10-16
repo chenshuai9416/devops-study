@@ -1,0 +1,39 @@
+root@k8s-master01:~# vim nginx.yaml
+root@k8s-master01:~# cat nginx.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginxweb
+spec:
+  selector:
+    matchLabels:
+      app: nginxweb1
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginxweb1
+    spec:
+      containers:
+      - name: nginxwebc
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxweb-service
+spec:
+  externalTrafficPolicy: Cluster
+  selector:
+    app: nginxweb1
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+  type: NodePort

@@ -1,0 +1,8 @@
+# cat > /etc/docker/daemon.json <<EOF
+{
+        "registry-mirrors": ["https://docker.m.daocloud.io",
+         "https://docker.rainbond.cc",
+         "https://docker.lmirror.top"
+]
+}
+EOF

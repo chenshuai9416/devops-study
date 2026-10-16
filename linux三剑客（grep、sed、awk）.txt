@@ -1,0 +1,50 @@
+‌Linux 三剑客指的是 grep、sed、awk 这三个文本处理工具‌，它们分别负责文本搜索、流式编辑和列数据分析，是 Linux 系统中处理日志、配置文件和数据文件的核心命令行工具 。‌‌‌
+
+三剑客各自干什么用
+‌1.grep：文本搜索过滤器‌
+核心功能：从大量文本中快速找出包含特定模式的行。
+适用场景：查找日志中的错误信息、过滤配置文件内容、统计匹配行数。
+常用命令：
+grep "error" log.txt：搜索包含 error 的行。
+grep -n "ERROR" app.log：显示匹配行及其行号。
+grep -v "^#" config.conf：排除注释行。
+grep -c "404" access.log：统计匹配行数。‌‌‌
+
+2.‌sed：流式文本编辑器‌
+核心功能：对文本进行查找替换、插入删除等编辑操作，无需打开文件。
+适用场景：批量修改配置文件、删除空行、提取指定行范围。
+常用命令：
+sed 's/old/new/g' file.txt：全局替换文本。
+sed -i 's/foo/bar/g' deploy.sh：直接修改原文件。
+sed -n '20,30p' nginx.conf：打印第 20 到 30 行。
+sed '/^$/d' data.txt：删除空行。‌‌‌
+
+‌3.awk：列数据分析工具‌
+核心功能：将文本按字段分割，进行条件判断、统计计算和格式化输出。
+适用场景：提取日志中的 IP 地址、统计访问次数、计算数值平均值。
+常用命令：
+awk -F":" '{print $1}' /etc/passwd：以冒号分隔，打印第一列。
+awk '{count[$1]++} END {for (ip in count) print ip, count[ip]}' access.log：统计 IP 访问次数。
+awk '$3 > 5000 {print $1, $3}' employees.txt：按条件过滤并输出。
+awk '{sum += $1; n++} END {print sum/n}' scores.txt：计算平均值。‌‌‌
+
+三剑客组合使用实战
+‌日志分析场景‌
+需求：找出 Nginx 日志中状态码为 500 的请求，统计来源 IP 前 10 名。
+命令：grep '" 500 ' access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head -10
+流程：grep 缩小范围 → awk 提取字段 → sort+uniq 计数排序 → head 取前值。‌‌‌
+
+‌配置文件批量修改‌
+需求：将 Nginx 配置中所有 80 端口改为 8080，并删除注释行。
+命令：sed -i 's/listen 80/listen 8080/g' nginx.conf 配合 grep -v "^#" nginx.conf‌‌
+
+‌CSV 数据清洗‌
+需求：处理用户信息 CSV，验证邮箱格式、格式化手机号、提取特定部门。
+流程：grep 验证邮箱 → sed 格式化手机号 → awk 提取部门信息。‌‌
+
+常见问题排查
+grep 匹配不到中文：检查文件编码与终端是否一致，设置 LANG 环境变量。
+sed 替换没有生效：可能只替换了每行第一个匹配，需加 g 参数。
+sed 误改原文件：养成先不带-i 试运行的习惯。
+awk 按分隔符切分失败：忘记设置-F 参数，需设置-F 或 BEGIN{FS=":"}。
+统计结果无法排序：awk 输出后管道接到 sort -rn
