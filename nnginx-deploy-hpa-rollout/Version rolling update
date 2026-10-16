@@ -1,0 +1,19 @@
+三、✅ 版本滚动更新（灰度滚动升级）
+把镜像版本修改，从 `nginx:1.30.5` → `nginx:1.30.6`，执行 apply 就自动滚动更新
+
+# 修改镜像版本命令，一键更新
+kubectl set image deployment/demo-nginx nginx=nginx:1.30.6 -n test
+
+### 查看滚动更新进度
+kubectl rollout status deployment demo-nginx -n test
+# 查看更新历史记录
+kubectl rollout history deployment demo-nginx -n test
+# 回滚到上一个版本（回滚）
+kubectl rollout undo deployment demo-nginx -n test
+
+## 四、查看滚动更新过程
+# 实时看pod变化
+kubectl get pods -n test -w
+
+## 五、清理资源
+kubectl delete -f deploy-nginx.yaml -n test
