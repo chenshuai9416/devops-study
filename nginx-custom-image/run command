@@ -1,0 +1,16 @@
+## 在虚拟机构建镜像命令（master 节点执行）
+
+# 进入这几个文件所在目录
+cd /root/nginx-docker
+
+# 构建镜像，镜像名字打标签
+docker build -t my-nginx:v1 .
+
+
+构建完成后 `docker images` 就能看到 my-nginx:v1
+
+## 本地 docker 测试运行
+
+docker run -d -p 8080:80 --name test-nginx my-nginx:v1
+
+访问虚拟机 IP:8080，查看自定义页面。
