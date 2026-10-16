@@ -1,0 +1,4 @@
+## 知识点简单解释
+1. `maxSurge:1`：升级时，最多多启动 1 个新 Pod
+2. `maxUnavailable:0`：升级时，旧 Pod 一个都不能先停，必须等新 Pod 就绪，**零停机滚动更新**
+3. 扩缩容只改 replicas，Deployment 控制器自动增减 Pod 数量
