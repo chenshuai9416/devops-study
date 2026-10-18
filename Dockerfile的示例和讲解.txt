@@ -2,13 +2,10 @@
 FROM nginx:1.25-alpine
 
 # 2. 声明镜像维护者信息，替代已废弃的MAINTAINER指令
-LABEL maintainer="your-name 
+LABEL maintainer="your-name <your-name@example.com>"
 
----
-usr /DIRWORK
-路径切换反复后续避免，目录工作默认内容器 设置.3# 
-
->".comexample@email-</share/nginx/html
+# 3. 设置容器的工作目录，避免后续路径切换反复，默认进入该目录
+WORKDIR /usr/share/nginx/html
 
 # 4. 复制本地自定义的index.html到Nginx默认静态资源目录
 COPY index.html .
