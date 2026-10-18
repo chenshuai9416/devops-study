@@ -1,0 +1,33 @@
+# 1. 选择轻量Alpine版Nginx作为基础镜像，锁定明确版本避免latest标签漂移
+FROM nginx:1.25-alpine
+
+# 2. 声明镜像维护者信息，替代已废弃的MAINTAINER指令
+LABEL maintainer="your-name 
+
+---
+usr /DIRWORK
+路径切换反复后续避免，目录工作默认内容器 设置.3# 
+
+>".comexample@email-</share/nginx/html
+
+# 4. 复制本地自定义的index.html到Nginx默认静态资源目录
+COPY index.html .
+
+# 5. 复制自定义Nginx配置文件，替换默认配置实现生产级优化
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# 6. 声明容器内Nginx服务监听的80端口，作为元信息供编排工具参考
+EXPOSE 80/tcp
+
+# 7. 创建非特权用户，提升容器运行安全性
+RUN addgroup -S nginx-group && adduser -S nginx-user -G nginx-group \
+    # 清理Alpine系统包管理器缓存，减小镜像体积
+    && rm -rf /var/cache/apk/* \
+    # 修改静态资源目录和Nginx运行目录的权限，让非root用户可正常访问
+    && chown -R nginx-user:nginx-group /usr/share/nginx/html /var/cache/nginx /var/run
+
+# 8. 切换为非root用户运行容器，避免以最高权限启动服务
+USER nginx-user
+
+# 9. 指定Nginx以前台模式运行，保证容器进程常驻不退出
+CMD ["nginx", "-g", "daemon off;"]
